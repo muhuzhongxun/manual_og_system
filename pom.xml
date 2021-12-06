@@ -19,6 +19,7 @@
         <lombok-version>1.18.12</lombok-version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <mybatis-plus-generator.version>3.4.0</mybatis-plus-generator.version>
+        <velocity.version>1.7</velocity.version>
         <druid.version>1.2.1</druid.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <fastjson.version>1.2.68</fastjson.version>
@@ -60,6 +61,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
             </dependency>
 
             <!-- kaptcha图形验证码-->

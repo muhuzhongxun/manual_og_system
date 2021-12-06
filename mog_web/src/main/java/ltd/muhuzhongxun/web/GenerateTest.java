@@ -18,11 +18,11 @@ public class GenerateTest {
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         dataSourceConfig.setUsername("root");
         dataSourceConfig.setPassword("123456");
-        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/manual_og_system");
+        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/manual_og_system?serverTimezone=GMT");
         autoGenerator.setDataSource(dataSourceConfig);
         //全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java");
+        globalConfig.setOutputDir(System.getProperty("user.dir") + "/mog_parent/mog_web/src/main/java");
         globalConfig.setAuthor("admin");
         globalConfig.setOpen(true);
         globalConfig.setServiceName("%sService");
