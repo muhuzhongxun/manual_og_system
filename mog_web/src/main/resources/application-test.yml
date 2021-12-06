@@ -1,0 +1,29 @@
+#端口号配置
+server:
+  port: 8089
+
+#数据库连接配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/manual_og_system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+
+#mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #配置mabatis-plus 在更新时只更新非空和非NULL的字段
+      update-strategy: not_empty
+
+logging:
+  pattern:
+    console: '%d{yyy-mm-dd} [%thread] %-5level %logger- %msg%n'
