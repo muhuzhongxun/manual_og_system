@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/manual_og_system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true
+    url: jdbc:mysql://localhost:3306/manual_og_system?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,6 +19,7 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: false
   global-config:
     db-config:
       #配置mabatis-plus 在更新时只更新非空和非NULL的字段
