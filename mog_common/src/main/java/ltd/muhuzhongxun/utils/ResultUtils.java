@@ -10,7 +10,7 @@ public class ResultUtils {
      * 无参数返回
      * @return
      */
-    public static ResultVo susscess() {
+    public static ResultVo success() {
         return Vo(null, StatusCode.SUCCESS_CODE, null);
     }
     public static ResultVo success(String msg){
@@ -29,6 +29,14 @@ public class ResultUtils {
     public static ResultVo success(String msg,int code,Object data) {
         return Vo(msg, code, data);
     }
+
+    /**
+     * Vo最终调用的方法，返回数据
+     * @param msg
+     * @param code
+     * @param data
+     * @return
+     */
     public static ResultVo Vo(String msg,int code,Object data){
         return new ResultVo(msg,code,data);
     }
