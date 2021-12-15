@@ -3,6 +3,8 @@ package ltd.muhuzhongxun.web.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.web.entity.SysUser;
@@ -25,6 +27,8 @@ import javax.websocket.server.PathParam;
  * @author admin
  * @since 2021-12-06
  */
+
+@Api("用户信息管理")
 @RestController
 @RequestMapping("/api/sysUser")
 public class SysUserController {
@@ -126,6 +130,7 @@ public class SysUserController {
      * @param parm
      * @return
      */
+    @ApiOperation(value="获取所有用户信息")
     @GetMapping("/list")
     public ResultVo list(SysUserParm parm){
          IPage<SysUser> list = sysUserService.list(parm);

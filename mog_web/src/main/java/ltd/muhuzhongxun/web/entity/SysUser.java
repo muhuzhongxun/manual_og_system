@@ -66,7 +66,7 @@ public class SysUser implements Serializable {
       private String isUsed;
 
       /**
-     * 0：用户，1：商家，2：管理员，3：站长
+     * 0：用户，1：认证用户，2：企业，3：管理员
      */
       private Integer userType;
 
