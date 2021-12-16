@@ -127,15 +127,15 @@ public class SysUserController {
 
     /**
      * 查询用户列表
-     * @param parm
+     * @param parm {userName: '',phone: '',curentPage: 1,pageSize: 10,total: 0}
      * @return
      */
     @ApiOperation(value="获取所有用户信息")
     @GetMapping("/list")
     public ResultVo list(SysUserParm parm){
-         IPage<SysUser> list = sysUserService.list(parm);
+        System.out.println(parm);
+        IPage<SysUser> list = sysUserService.list(parm);
         return ResultUtils.success("查询成功",list);
     }
-
 }
 

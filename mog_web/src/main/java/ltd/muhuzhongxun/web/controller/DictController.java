@@ -1,19 +1,19 @@
 package ltd.muhuzhongxun.web.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.web.entity.Dict;
+import ltd.muhuzhongxun.web.entity.DictEeVo;
 import ltd.muhuzhongxun.web.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.web.bind.annotation.RestController;
-
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -34,9 +34,22 @@ public class DictController {
 
     //根据数据id查询子数据列表
     @ApiOperation(value = "根据数据id查询子数据列表")
-    @GetMapping("findChildData/{id}")
-    public ResultVo findChildData(@PathVariable Long id) {
-        List<Dict> list = dictService.findChlidData(id);
+    @GetMapping("findChildData")
+    public ResultVo findChildData(Dict dict) {
+        List<Dict> list = dictService.findChlidData(dict.getId());
         return ResultUtils.success("查询成功",list);
+    }
+
+    @ApiOperation(value="导出")
+    @GetMapping(value = "/exportData")
+    public void exportData(HttpServletResponse response) {
+        dictService.exportData(response);
+    }
+
+    @ApiOperation(value = "导入")
+    @PostMapping("importData")
+    public ResultVo importData(MultipartFile file) {
+        dictService.importData(file);
+        return ResultUtils.success();
     }
 }
