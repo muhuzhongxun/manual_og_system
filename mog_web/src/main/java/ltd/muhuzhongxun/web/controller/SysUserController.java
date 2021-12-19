@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
+import ltd.muhuzhongxun.utils.TokenVo;
 import ltd.muhuzhongxun.web.entity.SysUser;
 import ltd.muhuzhongxun.web.entity.SysUserParm;
 import ltd.muhuzhongxun.web.service.SysUserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.server.PathParam;
+import java.util.HashMap;
 
 /**
  * <p>
@@ -35,23 +37,64 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
-//
+
+    /**
+     * 登录
+     * @param user
+     * @return 返回状态码一定要是20000才会跳转页面
+     */
+    @PostMapping("/login")
+    public ResultVo login(@RequestBody SysUser user){
+        String loginName= user.getLoginName();
+        String password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        if(loginName!=""&&password!="") {
+            QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
+            queryWrapper.eq("login_name", loginName);
+            SysUser one = sysUserService.getOne(queryWrapper);
+            if (one.getPassword().equals(password)) {
+                System.out.println("密码匹配成功");
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                map.put("token", loginName);
+                return ResultUtils.success("登录成功！", 20000, map);
+            } else {
+                return ResultUtils.error("登录密码有误！",50001);
+            }
+        }
+        return ResultUtils.error("登录名或密码不能为空！",50002);
+    }
+
+
+     /**
+     *获取登录后台用户的基础信息
+     * @param loginName
+     * @return
+     */
+    @GetMapping("/info")
+    public ResultVo info(@RequestParam("token") String loginName){
+        TokenVo tokenVo = new TokenVo();
+        tokenVo.setRoles("admin");
+        tokenVo.setName(loginName);
+        tokenVo.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        return ResultUtils.success("用户加载成功！",20000,tokenVo);
+    }
+
 //    @PostMapping("/login")
-//    public boolean login(@RequestBody SysUser user) {
+//    public ResultVo login(@RequestBody SysUser user) {
 //        System.out.println(user.toString());
 //        String loginName= user.getLoginName();
-//        String password= user.getPassword();
+//        String password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
 //        if(loginName!=""&&password!=""){
 //            QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
-//            queryWrapper.eq("loginName", loginName);
+//            queryWrapper.eq("login_name", loginName);
 //            SysUser one = sysUserService.getOne(queryWrapper);
 //            if (one.getPassword().equals(password)) {
 //                System.out.println("密码匹配成功");
-//                return true;
+//                return ResultUtils.success("登录成功！",loginName);
 //            } else {
-//                return false;
+//                return ResultUtils.error("登录密码有误！");
 //            }
-//        }return false;
+//        }
+//        return ResultUtils.error("用户名或密码不能为空");
 //    }
 
     /**
