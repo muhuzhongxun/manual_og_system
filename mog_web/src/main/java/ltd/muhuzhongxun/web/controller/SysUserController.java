@@ -78,24 +78,6 @@ public class SysUserController {
         return ResultUtils.success("用户加载成功！",20000,tokenVo);
     }
 
-//    @PostMapping("/login")
-//    public ResultVo login(@RequestBody SysUser user) {
-//        System.out.println(user.toString());
-//        String loginName= user.getLoginName();
-//        String password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
-//        if(loginName!=""&&password!=""){
-//            QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
-//            queryWrapper.eq("login_name", loginName);
-//            SysUser one = sysUserService.getOne(queryWrapper);
-//            if (one.getPassword().equals(password)) {
-//                System.out.println("密码匹配成功");
-//                return ResultUtils.success("登录成功！",loginName);
-//            } else {
-//                return ResultUtils.error("登录密码有误！");
-//            }
-//        }
-//        return ResultUtils.error("用户名或密码不能为空");
-//    }
 
     /**
      * 注册或者新增用户
