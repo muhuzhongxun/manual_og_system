@@ -10,6 +10,8 @@ import ltd.muhuzhongxun.web.service.DictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +32,7 @@ import java.util.List;
 @Service
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
     //根据数据id查询子数据列表
+    @Cacheable(value = "dict")
     @Override
     public List<Dict> findChlidData(Long id) {
         QueryWrapper<Dict> wrapper = new QueryWrapper<>();
@@ -53,7 +56,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         return count>0;
     }
 
-        @Override
+    @CacheEvict(value = "dict", allEntries=true)
+    @Override
     public List<Dict> FlexibleQueryDict(Dict dict) {
         //构造查询条件
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
