@@ -2,6 +2,9 @@ package ltd.muhuzhongxun.web.entity;
 
 import lombok.Data;
 
+/**
+ * 用户列表分页筛选属性类
+ */
 @Data
 public class SysUserParm {
     //页容量
@@ -12,6 +15,7 @@ public class SysUserParm {
     private String phone;
     //姓名
     private String userName;
-//    //用户角色类型
-//    private String userType;
+
+    //追加用户认证属性(身份证后4位)
+    private String cardId;
 }

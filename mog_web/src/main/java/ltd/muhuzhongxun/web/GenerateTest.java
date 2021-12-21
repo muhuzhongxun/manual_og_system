@@ -22,7 +22,7 @@ public class GenerateTest {
         autoGenerator.setDataSource(dataSourceConfig);
         //全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setOutputDir(System.getProperty("user.dir") + "/mog_parent/mog_web/src/main/java");
+        globalConfig.setOutputDir(System.getProperty("user.dir") + "/mog_web/src/main/java");
         globalConfig.setAuthor("admin");
         globalConfig.setOpen(true);
         globalConfig.setServiceName("%sService");
@@ -39,7 +39,7 @@ public class GenerateTest {
         //策略配置
         StrategyConfig strategyConfig = new StrategyConfig();
             //选择生成的对象表名，可输入多个"emp","student","teacher","task","essay","judge","choicetask"
-        strategyConfig.setInclude("dict");
+        strategyConfig.setInclude("sys_user_real");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setEntityLombokModel(true);

@@ -5,8 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ltd.muhuzhongxun.web.entity.SysUser;
 import ltd.muhuzhongxun.web.entity.SysUserParm;
-import ltd.muhuzhongxun.web.mapper.SysUserMapper;
-import ltd.muhuzhongxun.web.service.SysUserService;
+import ltd.muhuzhongxun.web.entity.SysUserReal;
+import ltd.muhuzhongxun.web.mapper.SysUserRealMapper;
+import ltd.muhuzhongxun.web.service.SysUserRealService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -17,29 +18,27 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author admin
- * @since 2021-12-06
+ * @since 2021-12-21
  */
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+public class SysUserRealServiceImpl extends ServiceImpl<SysUserRealMapper, SysUserReal> implements SysUserRealService {
+
+
     @Override
-    public IPage<SysUser> list(SysUserParm parm){
+    public IPage<SysUserReal> list(SysUserParm parm) {
         //构建分页对象
-        IPage<SysUser> page = new Page<>();
+        IPage<SysUserReal> page = new Page<>();
         page.setSize(parm.getPageSize());
         page.setCurrent(parm.getCurentPage());
         //构造查询条件
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(parm.getPhone())){
-            queryWrapper.lambda().like(SysUser::getPhone,parm.getPhone());
-        }
+        QueryWrapper<SysUserReal> queryWrapper = new QueryWrapper<>();
         if(StringUtils.isNotEmpty(parm.getUserName())){
-            queryWrapper.lambda().like(SysUser::getUserName,parm.getUserName());
+            queryWrapper.lambda().like(SysUserReal::getRealName,parm.getUserName());
+        }
+        //模糊查询符合身份证后4位的信息，待优化
+        if(StringUtils.isNotEmpty(parm.getCardId())){
+            queryWrapper.lambda().like(SysUserReal::getCardId,parm.getCardId());
         }
         return this.baseMapper.selectPage(page,queryWrapper);
-    }
-
-    @Override
-    public SysUser selectById(int Id) {
-        return baseMapper.selectById(Id);
     }
 }
