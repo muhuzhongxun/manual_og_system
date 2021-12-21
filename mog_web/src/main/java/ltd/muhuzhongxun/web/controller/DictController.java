@@ -40,6 +40,14 @@ public class DictController {
         return ResultUtils.success("查询成功",list);
     }
 
+
+    @ApiOperation(value = "模糊查询数据字典列表")
+    @GetMapping("FlexibleQueryDict")
+    public ResultVo FlexibleQueryDict(Dict dict){
+        List<Dict> list = dictService.FlexibleQueryDict(dict);
+        return ResultUtils.success("查询成功",list);
+    }
+
     @ApiOperation(value="导出")
     @GetMapping(value = "/exportData")
     public void exportData(HttpServletResponse response) {

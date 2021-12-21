@@ -8,6 +8,7 @@ import ltd.muhuzhongxun.web.entity.DictEeVo;
 import ltd.muhuzhongxun.web.mapper.DictMapper;
 import ltd.muhuzhongxun.web.service.DictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,20 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         return count>0;
     }
 
+        @Override
+    public List<Dict> FlexibleQueryDict(Dict dict) {
+        //构造查询条件
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(dict.getDictCode())){
+            queryWrapper.lambda().like(Dict::getDictCode,dict.getDictCode());
+        }
+        if(StringUtils.isNotEmpty(dict.getName())){
+            queryWrapper.lambda().like(Dict::getName,dict.getName());
+        }
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
+    //导入数据字典表格
     @Override
     public void exportData(HttpServletResponse response) {
         try {

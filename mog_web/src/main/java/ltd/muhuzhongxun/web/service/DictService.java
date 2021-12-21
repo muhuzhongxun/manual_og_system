@@ -26,4 +26,11 @@ public interface DictService extends IService<Dict> {
     void exportData(HttpServletResponse response);
 
     void importData(MultipartFile file);
+
+    /**
+     * 模糊查询
+     * @param dict(name,code)
+     * @return List
+     */
+    List<Dict> FlexibleQueryDict(Dict dict);
 }
