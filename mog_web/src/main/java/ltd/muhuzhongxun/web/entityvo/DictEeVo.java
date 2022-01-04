@@ -1,4 +1,4 @@
-package ltd.muhuzhongxun.web.entity;
+package ltd.muhuzhongxun.web.entityvo;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;

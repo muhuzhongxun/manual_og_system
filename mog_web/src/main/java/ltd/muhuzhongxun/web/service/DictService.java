@@ -17,7 +17,9 @@ import java.util.List;
  */
 public interface DictService extends IService<Dict> {
     //根据数据id查询子数据列表
-    List<Dict> findChlidData(Long id);
+    List<Dict> findChlidData(Long id,Boolean status);
+    //根据数据code查询子数据列表
+    List<Dict> findByDictCode(String dictCode);
 
     /**
      * 导出

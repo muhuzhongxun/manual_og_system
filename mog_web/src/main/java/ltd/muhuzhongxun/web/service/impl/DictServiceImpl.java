@@ -4,7 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import ltd.muhuzhongxun.listener.DictListener;
 import ltd.muhuzhongxun.web.entity.Dict;
-import ltd.muhuzhongxun.web.entity.DictEeVo;
+import ltd.muhuzhongxun.web.entityvo.DictEeVo;
 import ltd.muhuzhongxun.web.mapper.DictMapper;
 import ltd.muhuzhongxun.web.service.DictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,19 +34,21 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     //根据数据id查询子数据列表
     @Cacheable(value = "dict")
     @Override
-    public List<Dict> findChlidData(Long id) {
+    public List<Dict> findChlidData(Long id,Boolean status) {
         QueryWrapper<Dict> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id",id);
+        //查询指定父类id下的所有子数据
         List<Dict> dictList = baseMapper.selectList(wrapper);
-        //向list集合每个dict对象中设置hasChildren
-        for (Dict dict:dictList) {
-            Long dictId = dict.getId();
-            boolean isChild = this.isChildren(dictId);
-            dict.setHasChildren(isChild);
+        //如果status为true，向list集合每个dict对象中设置hasChildren，仅用于后端树形列表展示
+        if(status) {
+            for (Dict dict : dictList) {
+                Long dictId = dict.getId();
+                boolean isChild = this.isChildren(dictId);
+                dict.setHasChildren(isChild);
+            }
         }
         return dictList;
     }
-
     //判断id下面是否有子节点
     private boolean isChildren(Long id) {
         QueryWrapper<Dict> wrapper = new QueryWrapper<>();
@@ -56,7 +58,25 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         return count>0;
     }
 
-    @CacheEvict(value = "dict", allEntries=true)
+    //根据dictCode获取下级节点
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        //根据dictcode获取对应id
+        Dict dict = this.getDictByDictCode(dictCode);
+        //根据id获取子节点
+        List<Dict> chlidData = this.findChlidData(dict.getId(),false);
+        return chlidData;
+    }
+    private Dict getDictByDictCode(String dictCode) {
+        QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+        wrapper.eq("dict_code",dictCode);
+        Dict codeDict = baseMapper.selectOne(wrapper);
+        return codeDict;
+    }
+
+
+
+
     @Override
     public List<Dict> FlexibleQueryDict(Dict dict) {
         //构造查询条件
@@ -70,7 +90,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         return this.baseMapper.selectList(queryWrapper);
     }
 
-    //导入数据字典表格
+    //导出数据字典表格
     @Override
     public void exportData(HttpServletResponse response) {
         try {
@@ -94,7 +114,12 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
-    //导入数据字典
+    /**
+     * 导入
+     * allEntries = true: 方法调用后清空所有缓存
+     * @param file
+     */
+    @CacheEvict(value = "dict", allEntries=true)
     @Override
     public void importData(MultipartFile file) {
         try {

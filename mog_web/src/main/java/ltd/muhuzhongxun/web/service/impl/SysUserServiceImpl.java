@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ltd.muhuzhongxun.web.entity.SysUser;
-import ltd.muhuzhongxun.web.entity.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysUserParm;
 import ltd.muhuzhongxun.web.mapper.SysUserMapper;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

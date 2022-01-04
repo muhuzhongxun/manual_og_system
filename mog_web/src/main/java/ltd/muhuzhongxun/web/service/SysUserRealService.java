@@ -1,8 +1,7 @@
 package ltd.muhuzhongxun.web.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import ltd.muhuzhongxun.web.entity.SysUser;
-import ltd.muhuzhongxun.web.entity.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysUserParm;
 import ltd.muhuzhongxun.web.entity.SysUserReal;
 import com.baomidou.mybatisplus.extension.service.IService;
 
