@@ -59,6 +59,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     //根据dictCode获取下级节点
+    @Cacheable(value = "dict")
     @Override
     public List<Dict> findByDictCode(String dictCode) {
         //根据dictcode获取对应id

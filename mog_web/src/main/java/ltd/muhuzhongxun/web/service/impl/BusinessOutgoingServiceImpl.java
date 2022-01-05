@@ -3,6 +3,7 @@ package ltd.muhuzhongxun.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.val;
 import ltd.muhuzhongxun.web.entity.SysUser;
 import ltd.muhuzhongxun.web.entityvo.MogQueryVo;
 import ltd.muhuzhongxun.web.entity.BusinessOutgoing;
@@ -13,8 +14,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -69,5 +73,19 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
 
         return Result;
 
+    }
+
+    @Override
+    public List<BusinessOutgoing> selectBydetail(String detail) {
+        QueryWrapper<BusinessOutgoing> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(detail)){
+            queryWrapper.lambda().like(BusinessOutgoing::getOgTitle,detail);
+        }
+        return baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public BusinessOutgoing selectById(Integer ogId) {
+        return baseMapper.selectById(ogId);
     }
 }

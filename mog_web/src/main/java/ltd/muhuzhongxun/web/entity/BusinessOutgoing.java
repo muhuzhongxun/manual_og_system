@@ -1,11 +1,14 @@
 package ltd.muhuzhongxun.web.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -83,6 +86,7 @@ import lombok.EqualsAndHashCode;
       /**
      * 创建外发信息的日期
      */
+      @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss")
       private LocalDateTime ogDateStart;
 
       /**
