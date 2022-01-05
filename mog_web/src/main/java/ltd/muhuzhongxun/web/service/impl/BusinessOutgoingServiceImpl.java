@@ -60,7 +60,7 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
 
         //方法一：自定义查询语句（将表二（数据字典）的属性名换成对应表一（BusinessOutgoing）的QuantitUnit属性名）
         IPage<BusinessOutgoing> Result = baseMapper.selectMogPage(page,queryWrapper);
-//        //方法二：查询表一后遍历查询表二并更改表一的内容
+//        //方法二：查询表一后,遍历查询表二并更改表一的内容
 //        IPage<BusinessOutgoing> Result = baseMapper.selectPage(page,queryWrapper);
 //        //System.out.println(Result.getRecords());
 //        Result.getRecords().stream().forEach(item->{

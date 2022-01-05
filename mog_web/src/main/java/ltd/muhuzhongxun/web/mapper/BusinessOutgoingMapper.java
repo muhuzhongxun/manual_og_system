@@ -38,9 +38,8 @@ public interface BusinessOutgoingMapper extends BaseMapper<BusinessOutgoing> {
             "\tog.city_code, \n" +
             "\tdict.`name` AS quantit_unit\n" +
             "FROM\n" +
-            "\tbusiness_outgoing og,\n" +
-            "\tdict\n" +
-            "WHERE\n" +
-            "\tog.quantit_unit = dict.id")
+            "\tbusiness_outgoing og\n" +
+            "\tLEFT JOIN dict ON og.quantit_unit = dict.id" +
+            "\t${ew.customSqlSegment}")
     IPage<BusinessOutgoing> selectMogPage(IPage<BusinessOutgoing> page, @Param(Constants.WRAPPER) Wrapper<BusinessOutgoing> queryWrapper);
 }
