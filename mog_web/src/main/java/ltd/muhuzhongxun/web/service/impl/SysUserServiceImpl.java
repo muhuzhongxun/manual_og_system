@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ltd.muhuzhongxun.web.entity.SysUser;
-import ltd.muhuzhongxun.web.entityvo.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.mapper.SysUserMapper;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,18 +22,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
     @Override
-    public IPage<SysUser> list(SysUserParm parm){
+    public IPage<SysUser> list(SysParm parm){
         //构建分页对象
         IPage<SysUser> page = new Page<>();
         page.setSize(parm.getPageSize());
         page.setCurrent(parm.getCurentPage());
         //构造查询条件
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(parm.getPhone())){
-            queryWrapper.lambda().like(SysUser::getPhone,parm.getPhone());
+        if(StringUtils.isNotEmpty(parm.getText2())){
+            queryWrapper.lambda().like(SysUser::getPhone,parm.getText2());
         }
-        if(StringUtils.isNotEmpty(parm.getUserName())){
-            queryWrapper.lambda().like(SysUser::getUserName,parm.getUserName());
+        if(StringUtils.isNotEmpty(parm.getText1())){
+            queryWrapper.lambda().like(SysUser::getUserName,parm.getText1());
         }
         return this.baseMapper.selectPage(page,queryWrapper);
     }

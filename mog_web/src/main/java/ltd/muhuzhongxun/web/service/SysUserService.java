@@ -3,7 +3,8 @@ package ltd.muhuzhongxun.web.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import ltd.muhuzhongxun.web.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import ltd.muhuzhongxun.web.entityvo.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -13,9 +14,10 @@ import ltd.muhuzhongxun.web.entityvo.SysUserParm;
  * @author admin
  * @since 2021-12-06
  */
+@Transactional
 public interface SysUserService extends IService<SysUser> {
     //查询用户列表
-    IPage<SysUser> list(SysUserParm parm);
+    IPage<SysUser> list(SysParm parm);
 
     SysUser selectById(int Id);
 }

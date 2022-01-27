@@ -9,7 +9,7 @@ import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.utils.TokenVo;
 import ltd.muhuzhongxun.web.entity.SysUser;
-import ltd.muhuzhongxun.web.entityvo.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,8 @@ public class SysUserController {
     public ResultVo login(@RequestBody SysUser user){
         String loginName= user.getLoginName();
         String password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        // 输出加密后的密码，方便检查
+        System.out.println(password);
         if(loginName!=""&&password!="") {
             QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
             queryWrapper.eq("login_name", loginName);
@@ -127,7 +129,6 @@ public class SysUserController {
         if(info){
             return ResultUtils.success("用户信息更新成功！");
         }else {
-            SysUser a=new SysUser();
             return ResultUtils.error("用户信息更新失败");
         }
     }
@@ -154,7 +155,7 @@ public class SysUserController {
      */
     @ApiOperation(value="获取所有用户信息")
     @GetMapping("/list")
-    public ResultVo list(SysUserParm parm){
+    public ResultVo list(SysParm parm){
         System.out.println(parm);
         IPage<SysUser> list = sysUserService.list(parm);
         return ResultUtils.success("查询成功",list);

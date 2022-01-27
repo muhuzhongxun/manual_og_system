@@ -3,7 +3,7 @@ package ltd.muhuzhongxun.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ltd.muhuzhongxun.web.entityvo.SysUserParm;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.entity.SysUserReal;
 import ltd.muhuzhongxun.web.mapper.SysUserRealMapper;
 import ltd.muhuzhongxun.web.service.SysUserRealService;
@@ -24,19 +24,19 @@ public class SysUserRealServiceImpl extends ServiceImpl<SysUserRealMapper, SysUs
 
 
     @Override
-    public IPage<SysUserReal> list(SysUserParm parm) {
+    public IPage<SysUserReal> list(SysParm parm) {
         //构建分页对象
         IPage<SysUserReal> page = new Page<>();
         page.setSize(parm.getPageSize());
         page.setCurrent(parm.getCurentPage());
         //构造查询条件
         QueryWrapper<SysUserReal> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(parm.getUserName())){
-            queryWrapper.lambda().like(SysUserReal::getRealName,parm.getUserName());
+        if(StringUtils.isNotEmpty(parm.getText1())){
+            queryWrapper.lambda().like(SysUserReal::getRealName,parm.getText1());
         }
         //模糊查询符合身份证后4位的信息，待优化
-        if(StringUtils.isNotEmpty(parm.getCardId())){
-            queryWrapper.lambda().like(SysUserReal::getCardId,parm.getCardId());
+        if(StringUtils.isNotEmpty(parm.getText2())){
+            queryWrapper.lambda().like(SysUserReal::getCardId,parm.getText2());
         }
         return this.baseMapper.selectPage(page,queryWrapper);
     }

@@ -48,10 +48,6 @@ public class MogController {
         return ResultUtils.success("查询成功",list);
     }
 
-    @GetMapping("ToMogDetail/{ogId}")
-    public String ToMogDetail(@PathVariable Integer ogId){
-        return "MogDetail/"+ogId;
-    }
 
     @ApiOperation(value="mog详细页面")
     @GetMapping("findMogDetail/{ogId}")

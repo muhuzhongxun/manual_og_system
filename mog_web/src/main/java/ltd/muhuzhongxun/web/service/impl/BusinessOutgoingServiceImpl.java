@@ -1,12 +1,15 @@
 package ltd.muhuzhongxun.web.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.val;
 import ltd.muhuzhongxun.web.entity.SysUser;
+import ltd.muhuzhongxun.web.entity.SysUserReal;
 import ltd.muhuzhongxun.web.entityvo.MogQueryVo;
 import ltd.muhuzhongxun.web.entity.BusinessOutgoing;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.mapper.BusinessOutgoingMapper;
 import ltd.muhuzhongxun.web.mapper.DictMapper;
 import ltd.muhuzhongxun.web.service.BusinessOutgoingService;
@@ -33,6 +36,9 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
 
     @Autowired
     private DictMapper dictMapper;
+
+    @Autowired
+    private BusinessOutgoingMapper businessOutgoingMapper;
 
     @Override
     public IPage<BusinessOutgoing> selectMogPage(MogQueryVo mogQueryVo) {
@@ -62,8 +68,9 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
         //检索未失效的内容{isUesd: 0}
         queryWrapper.lambda().eq(BusinessOutgoing::getIsUsed,mogQueryVo.getIsUsed());
 
+        //下面注解全部撤回,视为放弃.
         //方法一：自定义查询语句（将表二（数据字典）的属性名换成对应表一（BusinessOutgoing）的QuantitUnit属性名）
-        IPage<BusinessOutgoing> Result = baseMapper.selectMogPage(page,queryWrapper);
+        IPage<BusinessOutgoing> Result = baseMapper.selectPage(page,queryWrapper);
 //        //方法二：查询表一后,遍历查询表二并更改表一的内容
 //        IPage<BusinessOutgoing> Result = baseMapper.selectPage(page,queryWrapper);
 //        //System.out.println(Result.getRecords());
@@ -87,5 +94,22 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
     @Override
     public BusinessOutgoing selectById(Integer ogId) {
         return baseMapper.selectById(ogId);
+    }
+
+    @Override
+    public IPage<BusinessOutgoing> list(SysParm parm) {
+        //构建分页对象
+        IPage<BusinessOutgoing> page = new Page<>();
+        page.setSize(parm.getPageSize());
+        page.setCurrent(parm.getCurentPage());
+        //构造查询条件
+        QueryWrapper<BusinessOutgoing> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(parm.getText1())){
+            queryWrapper.lambda().like(BusinessOutgoing::getOgTitle,parm.getText1());
+        }
+        if(StringUtils.isNotEmpty(parm.getText2())){
+            queryWrapper.lambda().like(BusinessOutgoing::getUserId,parm.getText2());
+        }
+        return baseMapper.selectPage(page,queryWrapper);
     }
 }

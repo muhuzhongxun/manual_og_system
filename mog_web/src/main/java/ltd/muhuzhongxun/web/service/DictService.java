@@ -2,6 +2,7 @@ package ltd.muhuzhongxun.web.service;
 
 import ltd.muhuzhongxun.web.entity.Dict;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author admin
  * @since 2021-12-14
  */
+@Transactional
 public interface DictService extends IService<Dict> {
     //根据数据id查询子数据列表
     List<Dict> findChlidData(Long id,Boolean status);

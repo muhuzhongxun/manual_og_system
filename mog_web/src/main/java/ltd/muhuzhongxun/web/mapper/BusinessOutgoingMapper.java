@@ -19,27 +19,46 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface BusinessOutgoingMapper extends BaseMapper<BusinessOutgoing> {
 
-    //将og的quantit_unit属性值换成dict字典里的值
+    // 左连接了user表
     @Select(value="SELECT\n" +
-            "\tog.og_id, \n" +
-            "\tog.user_id, \n" +
-            "\tog.og_title, \n" +
-            "\tog.details, \n" +
-            "\tog.quantity, \n" +
-            "\tog.unit_Price, \n" +
-            "\tog.total_price, \n" +
-            "\tog.remark, \n" +
-            "\tog.industry, \n" +
-            "\tog.processing_method, \n" +
-            "\tog.og_date_start, \n" +
-            "\tog.og_date_end, \n" +
-            "\tog.delivery_date, \n" +
-            "\tog.province_code, \n" +
-            "\tog.city_code, \n" +
-            "\tdict.`name` AS quantit_unit\n" +
+            "\tOG.og_id, \n" +
+            "\tOG.user_id, \n" +
+            "\tOG.details, \n" +
+            "\tOG.og_title, \n" +
+            "\tOG.quantity, \n" +
+            "\tOG.quantit_unit, \n" +
+            "\tOG.unit_Price, \n" +
+            "\tOG.total_price, \n" +
+            "\tOG.remark, \n" +
+            "\tOG.processing_method, \n" +
+            "\tOG.industry, \n" +
+            "\tOG.og_date_start, \n" +
+            "\tOG.og_date_end, \n" +
+            "\tOG.delivery_date, \n" +
+            "\tOG.city_code, \n" +
+            "\tOG.province_code, \n" +
+            "\tB.business_id, \n" +
+            "\tB.business_name, \n" +
+            "\tB.business_phone, \n" +
+            "\tB.business_type, \n" +
+            "\tB.business_person, \n" +
+            "\tB.business_num, \n" +
+            "\tB.product, \n" +
+            "\tB.brand, \n" +
+            "\tB.area, \n" +
+            "\tB.model, \n" +
+            "\tB.introduction, \n" +
+            "\tB.time, \n" +
+            "\tB.real_date_start, \n" +
+            "\tB.picture, \n" +
+            "\tB.real_date_end, \n" +
+            "\tB.real_status\n" +
             "FROM\n" +
-            "\tbusiness_outgoing og\n" +
-            "\tLEFT JOIN dict ON og.quantit_unit = dict.id" +
+            "\tbusiness_outgoing AS OG\n" +
+            "\tLEFT JOIN\n" +
+            "\tsys_business AS B\n" +
+            "\tON \n" +
+            "\t\tOG.user_id = B.user_id" +
             "\t${ew.customSqlSegment}")
-    IPage<BusinessOutgoing> selectMogPage(IPage<BusinessOutgoing> page, @Param(Constants.WRAPPER) Wrapper<BusinessOutgoing> queryWrapper);
+    IPage<BusinessOutgoing> selectUserOGPage(IPage<BusinessOutgoing> page, @Param(Constants.WRAPPER) Wrapper<BusinessOutgoing> queryWrapper);
 }

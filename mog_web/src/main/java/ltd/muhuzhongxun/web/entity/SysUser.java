@@ -51,6 +51,11 @@ public class SysUser implements Serializable {
       private String realId;
 
       /**
+       * 企业认证编号默认为0
+       */
+      private String realBusinessId;
+
+      /**
      * 手机号
      */
       private String phone;

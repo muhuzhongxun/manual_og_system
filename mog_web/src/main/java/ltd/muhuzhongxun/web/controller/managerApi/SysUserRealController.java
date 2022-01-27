@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.web.entity.SysUser;
-import ltd.muhuzhongxun.web.entityvo.SysUserParm;
 import ltd.muhuzhongxun.web.entity.SysUserReal;
+import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.service.SysUserRealService;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import org.apache.commons.lang.StringUtils;
@@ -96,7 +96,7 @@ public class SysUserRealController {
      */
     @ApiOperation(value="获取所有用户认证信息")
     @GetMapping("/list")
-    public ResultVo list(SysUserParm parm){
+    public ResultVo list(SysParm parm){
         System.out.println(parm);
         IPage<SysUserReal> list = service.list(parm);
         return ResultUtils.success("查询成功",list);
