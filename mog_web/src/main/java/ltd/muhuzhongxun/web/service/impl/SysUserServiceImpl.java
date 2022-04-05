@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -39,7 +41,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public SysUser selectById(int Id) {
+    public List<SysUser> list() {
+        return baseMapper.selectList(null);
+    }
+
+    @Override
+    public SysUser selectById(Integer Id) {
         return baseMapper.selectById(Id);
     }
 }

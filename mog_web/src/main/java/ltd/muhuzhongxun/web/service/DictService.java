@@ -37,4 +37,6 @@ public interface DictService extends IService<Dict> {
      * @return List
      */
     List<Dict> FlexibleQueryDict(Dict dict);
+
+
 }

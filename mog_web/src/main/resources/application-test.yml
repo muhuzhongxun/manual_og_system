@@ -22,7 +22,6 @@ mybatis-plus:
 #    map-underscore-to-camel-case: false
   global-config:
     db-config:
-      #配置mabatis-plus 在更新时只更新非空和非NULL的字段
       update-strategy: not_empty
 
 logging:

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import ltd.muhuzhongxun.web.entityvo.SysParm;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -16,8 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public interface SysUserService extends IService<SysUser> {
-    //查询用户列表
+    //分页查询用户列表
     IPage<SysUser> list(SysParm parm);
 
-    SysUser selectById(int Id);
+    //一次查询所有用户
+    List<SysUser> list();
+
+    SysUser selectById(Integer Id);
 }

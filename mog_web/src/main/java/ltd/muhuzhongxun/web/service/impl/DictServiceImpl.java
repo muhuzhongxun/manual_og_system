@@ -39,7 +39,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         wrapper.eq("parent_id",id);
         //查询指定父类id下的所有子数据
         List<Dict> dictList = baseMapper.selectList(wrapper);
-        //如果status为true，向list集合每个dict对象中设置hasChildren，仅用于后端树形列表展示
+        //如果status为true，向list集合每个dict对象中设置hasChildren，仅用于后台管理系统的树形列表展示
         if(status) {
             for (Dict dict : dictList) {
                 Long dictId = dict.getId();

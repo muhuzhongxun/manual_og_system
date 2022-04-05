@@ -38,6 +38,10 @@ public class SysUserRealServiceImpl extends ServiceImpl<SysUserRealMapper, SysUs
         if(StringUtils.isNotEmpty(parm.getText2())){
             queryWrapper.lambda().like(SysUserReal::getCardId,parm.getText2());
         }
+        //只查询未审核的信息{RealStatus=3}
+        if(StringUtils.isNotEmpty(parm.getText3())){
+            queryWrapper.lambda().like(SysUserReal::getRealStatus,parm.getText3());
+        }
         return this.baseMapper.selectPage(page,queryWrapper);
     }
 }

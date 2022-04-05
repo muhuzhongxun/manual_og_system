@@ -1,7 +1,10 @@
 package ltd.muhuzhongxun.web.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -10,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author admin
@@ -56,11 +59,13 @@ import lombok.EqualsAndHashCode;
       /**
      * 申请认证时间
      */
+      @TableField(fill = FieldFill.INSERT)
       private LocalDateTime realDateStart;
 
       /**
      * 认证时间
      */
+      @TableField(fill = FieldFill.UPDATE)
       private LocalDateTime realDateEnd;
 
       /**

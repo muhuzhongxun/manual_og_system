@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import ltd.muhuzhongxun.utils.JwtHelper;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.utils.TokenVo;
@@ -17,6 +18,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -52,9 +54,18 @@ public class SysUserController {
             SysUser one = sysUserService.getOne(queryWrapper);
             if (one.getPassword().equals(password)) {
                 System.out.println("密码匹配成功");
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                map.put("token", loginName);
-                return ResultUtils.success("登录成功！", 20000, map);
+                HashMap<String, Object> Map = new HashMap<String, Object>();
+                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    // 添加 Map { "token": {"loginName": $loginName,"roles": $userType} }返回前端
+                    map.put("userId",one.getUserId());
+                    map.put("name", loginName);
+                    map.put("roles",one.getUserType());
+                    map.put("status",true);
+//                    map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+                    map.put("avatar",one.getAvatar());
+//                String token = JwtHelper.createToken(one.getUserId(), loginName,one.getUserType(),true,one.getAvatar());
+                Map.put("token",map);
+                return ResultUtils.success("登录成功！", 20000, Map);
             } else {
                 return ResultUtils.error("登录密码有误！",50001);
             }
@@ -65,16 +76,27 @@ public class SysUserController {
 
      /**
      *获取登录后台用户的基础信息
-     * @param loginName
+     * @param token{name:'',roles:'',avatar:''}
      * @return
      */
-    @GetMapping("/info")
-    public ResultVo info(@RequestParam("token") String loginName){
-        TokenVo tokenVo = new TokenVo();
-        tokenVo.setRoles("admin");
-        tokenVo.setName(loginName);
-        tokenVo.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        return ResultUtils.success("用户加载成功！",20000,tokenVo);
+    @PostMapping("/info")
+    public ResultVo info(@RequestBody TokenVo token){
+        System.out.println(token);
+        if(StringUtils.isNotEmpty(token.getName())) {
+            return ResultUtils.success("用户加载成功！", 20000, token);
+        }else{
+            return ResultUtils.success("登录信息已过期！请重新登录！", 50000, null);
+        }
+    }
+
+    /**
+     * 登出
+     * @return
+     */
+    @PostMapping("/logout")
+    public ResultVo logout(){
+        // 添加登出功能
+        return ResultUtils.success("登出成功",20000,null);
     }
 
 
@@ -108,21 +130,23 @@ public class SysUserController {
 
     /**
      * 编辑用户
-     * @param user
+     * @param user{UserId,loginName,...}
      * @return
      */
     @PutMapping
     public ResultVo editUser(@RequestBody SysUser user){
         // 判断登陆名的唯一性
         QueryWrapper<SysUser> query= new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(user.getLoginName())){return ResultUtils.error("缺少参数loginName",500);}
         query.lambda().eq(SysUser::getLoginName,user.getLoginName());
         SysUser one = sysUserService.getOne(query);
         //判断其他用户登陆账号与编辑的账号相同
         if(one != null && one.getUserId() != user.getUserId()){
             return ResultUtils.error("登录账号已经被占用！",500);
         }
-        // 如果密码存在，用MD加密
-        if(StringUtils.isNotEmpty(user.getPassword())){
+        // 如果前端传来的新密码和数据库中加密过的密码不一致,
+        if(one != null && !one.getPassword().equals(user.getPassword())){
+            // 将新密码加密后更改数据库
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         }
         boolean info = sysUserService.updateById(user);
@@ -153,11 +177,18 @@ public class SysUserController {
      * @param parm {userName: '',phone: '',curentPage: 1,pageSize: 10,total: 0}
      * @return
      */
-    @ApiOperation(value="获取所有用户信息")
+    @ApiOperation(value="分页获取用户信息")
     @GetMapping("/list")
     public ResultVo list(SysParm parm){
-        System.out.println(parm);
         IPage<SysUser> list = sysUserService.list(parm);
+
+        return ResultUtils.success("查询成功",list);
+    }
+
+    @ApiOperation(value="获取所有用户信息")
+    @GetMapping("/AllList")
+    public ResultVo list(){
+        List<SysUser>  list=sysUserService.list();
         return ResultUtils.success("查询成功",list);
     }
 }

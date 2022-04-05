@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenVo {
-    private String roles;
+    private Integer userId;
+    private Integer roles;
     private String name;
     private String avatar;
-    
+
 }

@@ -14,6 +14,7 @@ import ltd.muhuzhongxun.web.service.SysUserRealService;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,30 +47,48 @@ public class SysUserRealController {
         if (StringUtils.isNotEmpty(user.getUserId().toString())){
             QueryWrapper<SysUser> query = new QueryWrapper<>();
             query.lambda().eq(SysUser::getUserId, user.getUserId());
+            // 从<用户表>中查询用户信息
             SysUser one = userservice.getOne(query);
             if(one == null){
-                return ResultUtils.error("无效用户ID！", 500);
+                return ResultUtils.error("无效用户ID！", 501);
             }else //若该用户已被禁用
                 if(userservice.selectById(user.getUserId()).getIsUsed() == "1"){
-                    return ResultUtils.error("该用户暂停使用！", 501);
+                    return ResultUtils.error("该用户暂停使用！", 502);
             }
-        }
-        // 判断身份证ID的唯一性
+        }else return ResultUtils.error("空用户ID", 500);
+        // 从<用户认证表>中判断身份证ID的唯一性
         if(StringUtils.isNotEmpty(user.getCardId())) {
             QueryWrapper<SysUserReal> query = new QueryWrapper<>();
             query.lambda().eq(SysUserReal::getCardId, user.getCardId());
+            // RealStatus=1代表 认证成功的
             query.lambda().eq(SysUserReal::getRealStatus, "1");
             int num = service.count(query);
             // 若认证信息中已有三条相同身份证认证成功信息，则不能再认证新账号
             if (num > 3) {
-                return ResultUtils.error("该身份证件已超过最大认证数！", 510);
+                return ResultUtils.error("该身份证件认证账号数已达上限！", 511);
             }
-        }
+        }else return ResultUtils.error("空身份证ID", 510);
+
         boolean save = service.save(user);
         if(save){
             return ResultUtils.success("用户认证信息添加成功！");
         }else {
-            return ResultUtils.error("用户认证信息添加失败");
+            return ResultUtils.error("用户认证信息添加失败！");
+        }
+    }
+
+    /**
+     * 编辑用户
+     * @param user
+     * @return
+     */
+    @PutMapping
+    public ResultVo editUser(@RequestBody SysUserReal user){
+        boolean info = service.updateById(user);
+        if(info){
+            return ResultUtils.success("认证信息状态已更改！");
+        }else {
+            return ResultUtils.error("认证信息状态更改失败！");
         }
     }
 

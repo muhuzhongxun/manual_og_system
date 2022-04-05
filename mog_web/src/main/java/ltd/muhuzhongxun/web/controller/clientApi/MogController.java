@@ -8,6 +8,7 @@ import ltd.muhuzhongxun.web.entityvo.MogQueryVo;
 import ltd.muhuzhongxun.utils.ResultUtils;
 import ltd.muhuzhongxun.utils.ResultVo;
 import ltd.muhuzhongxun.web.entity.BusinessOutgoing;
+import ltd.muhuzhongxun.web.entityvo.UserPublishMogVo;
 import ltd.muhuzhongxun.web.service.BusinessOutgoingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,19 +37,21 @@ public class MogController {
     }
 
     /**
-     * 用于搜索框提示
-     * @param detail
+     * 用于搜索框提示相关内容
+     * 后端输出所有内容，前端过滤无关内容
      * @return
      */
-    @ApiOperation(value="根据名称查询信息")
-    @GetMapping("FlexibleQueryMog/{detail}")
-    public ResultVo findMogListByDetail(@PathVariable String detail){
-        // 多方向查询未写
-        List<BusinessOutgoing> list = ogService.selectBydetail(detail);
+    @ApiOperation(value="查询所有外发信息")
+    @GetMapping("findAllMogList")
+    public ResultVo findAllMogList(){
+        List<BusinessOutgoing> list = ogService.selectList();
         return ResultUtils.success("查询成功",list);
     }
 
 
+    /*
+     * 查询外发的详细信息
+     */
     @ApiOperation(value="mog详细页面")
     @GetMapping("findMogDetail/{ogId}")
     public ResultVo findMogDetail(@PathVariable Integer ogId){
@@ -56,4 +59,15 @@ public class MogController {
         BusinessOutgoing one = ogService.selectById(ogId);
         return ResultUtils.success("查询成功",one);
     }
+
+    /*
+     * 查询外发者的相关发布信息标题
+     */
+    @ApiOperation(value="相关发布信息标题")
+    @GetMapping("findAllPublishMog/{userId}")
+    public ResultVo findAllPublishMog(@PathVariable Integer userId){
+        List<UserPublishMogVo> list = ogService.findPublicMogTree(userId);
+        return ResultUtils.success("查询成功",list);
+    }
+
 }

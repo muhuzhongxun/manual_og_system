@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,8 +28,8 @@ public class BusinessOutgoing implements Serializable {
   /**
    * 外发编号
    */
-  @TableId(value = "og_id", type = IdType.AUTO)
-  private Integer ogId;
+  @TableId(value = "og_id", type = IdType.ASSIGN_ID)
+  private Long ogId;
 
   /**
    * 用户编号
@@ -129,4 +130,6 @@ public class BusinessOutgoing implements Serializable {
    */
   private String isUsed;
 
+  @Version
+  private Integer version;
 }
