@@ -45,5 +45,14 @@
             <version>2.3.0</version>
         </dependency>
 
+<!--        邮箱-->
+        <!-- https://mvnrepository.com/artifact/com.github.jurajburian/mailer -->
+        <dependency>
+            <groupId>com.github.jurajburian</groupId>
+            <artifactId>mailer_2.13</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+
+
     </dependencies>
 </project>

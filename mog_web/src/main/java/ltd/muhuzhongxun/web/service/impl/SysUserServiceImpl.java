@@ -3,15 +3,22 @@ package ltd.muhuzhongxun.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ltd.muhuzhongxun.utils.JwtHelper;
 import ltd.muhuzhongxun.web.entity.SysUser;
+import ltd.muhuzhongxun.web.entityvo.LoginVo;
 import ltd.muhuzhongxun.web.entityvo.SysParm;
 import ltd.muhuzhongxun.web.mapper.SysUserMapper;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -48,5 +55,71 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser selectById(Integer Id) {
         return baseMapper.selectById(Id);
+    }
+
+    @Override
+    public Map<String, Object> login(LoginVo loginVo) {
+        // 判断phone是否是邮箱
+        String pattern = "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m =r.matcher(loginVo.getPhone());
+        String phone = loginVo.getPhone();
+        String code = loginVo.getCode();
+        //校验参数
+        if(StringUtils.isEmpty(phone) ||
+                StringUtils.isEmpty(code)) {
+            throw new RuntimeException("参数不正确");
+        }
+
+        //TODO 校验校验验证码
+
+        //手机号/邮箱已被使用
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if(m.matches()){
+            //true 为邮箱
+            queryWrapper.eq("email", phone);
+        }else{
+            //false 为phone
+            queryWrapper.eq("phone", phone);
+        }
+        //获取会员
+        SysUser userInfo = baseMapper.selectOne(queryWrapper);
+        if(null == userInfo) {
+            userInfo = new SysUser();
+            userInfo.setUserName("");
+            userInfo.setLoginName("");
+            // 赋值初始密码8个8并加密
+            userInfo.setPassword(DigestUtils.md5DigestAsHex("88888888".getBytes()));
+            if(m.matches()){
+                //true 为邮箱
+                userInfo.setEmail(phone);
+            }else{
+                //false 为phone
+                userInfo.setPhone(phone);
+            }
+            userInfo.setStatus(false);
+            this.save(userInfo);
+        }
+//        //校验是否被禁用
+//        if(userInfo.getStatus() == 0) {
+//            throw new YyghException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
+//        }
+
+        //TODO 记录登录
+
+        //返回页面显示名称
+        Map<String, Object> map = new HashMap<>();
+        String name = userInfo.getLoginName();
+        if(StringUtils.isEmpty(name)) {
+            name = userInfo.getLoginName();
+        }
+        if(StringUtils.isEmpty(name)) {
+            name = userInfo.getPhone();
+        }
+        map.put("name", name);
+        //jwt生成token字符串
+        String token = JwtHelper.createToken(userInfo.getUserId(),name,userInfo.getUserType(),true,userInfo.getAvatar());
+        map.put("token",token);
+        return map;
     }
 }

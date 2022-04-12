@@ -3,10 +3,12 @@ package ltd.muhuzhongxun.web.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import ltd.muhuzhongxun.web.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import ltd.muhuzhongxun.web.entityvo.LoginVo;
 import ltd.muhuzhongxun.web.entityvo.SysParm;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,4 +27,7 @@ public interface SysUserService extends IService<SysUser> {
     List<SysUser> list();
 
     SysUser selectById(Integer Id);
+
+    //会员登录
+    Map<String, Object> login(LoginVo loginVo);
 }

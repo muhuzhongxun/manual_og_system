@@ -97,6 +97,11 @@ public class SysUser implements Serializable {
    */
   private String avatar;
 
+  /*
+   * 邮箱
+   */
+  private String email;
+
   @Version
   @TableField(fill = FieldFill.INSERT)
   private Integer version;
