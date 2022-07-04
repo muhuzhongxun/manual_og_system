@@ -44,4 +44,13 @@ public class SysUserRealServiceImpl extends ServiceImpl<SysUserRealMapper, SysUs
         }
         return this.baseMapper.selectPage(page,queryWrapper);
     }
+
+    @Override
+    public SysUserReal getOneByuserId(Integer userId) {
+        //构造查询条件
+        QueryWrapper<SysUserReal> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysUserReal::getUserId,userId);
+        return this.baseMapper.selectOne(queryWrapper);
+    }
+
 }

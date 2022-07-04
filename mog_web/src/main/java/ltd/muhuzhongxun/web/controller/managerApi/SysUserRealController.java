@@ -69,6 +69,10 @@ public class SysUserRealController {
             }
         }else return ResultUtils.error("空身份证ID", 510);
 
+        if(user.getRealStatus()==null){
+            // 认证状态设置为待审核
+            user.setRealStatus(3);
+        }
         boolean save = service.save(user);
         if(save){
             return ResultUtils.success("用户认证信息添加成功！");

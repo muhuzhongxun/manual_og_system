@@ -30,43 +30,43 @@ public class BusinessOutgoingController {
     @Autowired
     private BusinessOutgoingService OGService;
 
-    // 获取企业列表
+    // 获取用户外发信息列表
     @GetMapping("/list")
     public ResultVo list(SysParm parm){
         IPage<BusinessOutgoing> list = OGService.list(parm);
         return ResultUtils.success("查询成功",list);
     }
 
-    // 新增企业
+    // 新增用户外发信息
     @PostMapping
     public ResultVo addUser(@RequestBody BusinessOutgoing OG){
         boolean save = OGService.save(OG);
         if(save){
-            return ResultUtils.success("企业信息添加成功！");
+            return ResultUtils.success("用户外发信息信息添加成功！");
         }else {
-            return ResultUtils.error("企业信息添加失败");
+            return ResultUtils.error("用户外发信息信息添加失败");
         }
     }
 
-    // 编辑企业
+    // 编辑用户外发信息
     @PutMapping
     public ResultVo editUser(@RequestBody BusinessOutgoing OG){
         boolean info = OGService.updateById(OG);
         if(info){
-            return ResultUtils.success("企业信息更新成功！");
+            return ResultUtils.success("用户外发信息信息更新成功！");
         }else {
-            return ResultUtils.error("企业信息更新失败");
+            return ResultUtils.error("用户外发信息信息更新失败");
         }
     }
 
-    // 删除企业 此处 parm:{BusinessId:${key}}
+    // 删除用户外发信息 此处 parm:{BusinessId:${key}}
     @DeleteMapping("/{ogId}")
-    public ResultVo deleteUser(@PathVariable("ogId") int ogId){
+    public ResultVo deleteUser(@PathVariable("ogId") Long ogId){
         boolean info = OGService.removeById(ogId);
         if(info){
-            return ResultUtils.success("企业信息删除成功！");
+            return ResultUtils.success("用户外发信息信息删除成功！");
         }else {
-            return ResultUtils.error("企业信息删除失败");
+            return ResultUtils.error("用户外发信息信息删除失败");
         }
     }
 }

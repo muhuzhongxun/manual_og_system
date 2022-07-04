@@ -89,7 +89,7 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
     }
 
     @Override
-    public BusinessOutgoing selectById(Integer ogId) {
+    public BusinessOutgoing selectById(Long ogId) {
         return baseMapper.selectById(ogId);
     }
 
@@ -173,4 +173,42 @@ public class BusinessOutgoingServiceImpl extends ServiceImpl<BusinessOutgoingMap
         //返回result:{userPublishMogVo1:{industry，childrent:{userPublishMogVo2:{ogid,ogtitle}}}}）
         return result;
     }
+
+    @Override
+    public List<BusinessOutgoing> findAllUserId(Integer userId) {
+        //根据userid查询其所有的外发信息列表
+        QueryWrapper<BusinessOutgoing> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId);
+        List<BusinessOutgoing> mymogList = baseMapper.selectList(wrapper);
+//        //通过远程调用，得到编码对应具体内容，查询数据字典表内容
+//        mymogList.stream().forEach(item -> {
+//            //其他参数封装
+//            this.packMog(item);
+//        });
+        return mymogList;
+    }
+
+//    //BusinessOutgoing对象里面其他参数封装
+//    private BusinessOutgoing packMog(BusinessOutgoing mymog) {
+//        //根据证件类型编码，获取证件类型具体指
+//        String certificatesTypeString =
+//                dictFeignClient.getName(DictEnum.CERTIFICATES_TYPE.getDictCode(), mymog.getCertificatesType());//联系人证件
+//        //联系人证件类型
+//        String contactsCertificatesTypeString =
+//                dictFeignClient.getName(DictEnum.CERTIFICATES_TYPE.getDictCode(),mymog.getContactsCertificatesType());
+//        //省
+//        String provinceString = dictFeignClient.getName(mymog.getProvinceCode());
+//        //市
+//        String cityString = dictFeignClient.getName(mymog.getCityCode());
+//        //区
+//        String districtString = dictFeignClient.getName(mymog.getDistrictCode());
+//        mymog.getParam().put("certificatesTypeString", certificatesTypeString);
+//        mymog.getParam().put("contactsCertificatesTypeString", contactsCertificatesTypeString);
+//        mymog.getParam().put("provinceString", provinceString);
+//        mymog.getParam().put("cityString", cityString);
+//        mymog.getParam().put("districtString", districtString);
+//        mymog.getParam().put("fullAddress", provinceString + cityString + districtString + mymog.getAddress());
+//        return mymog;
+//    }
+
 }

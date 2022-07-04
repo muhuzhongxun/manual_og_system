@@ -18,4 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SysUserRealService extends IService<SysUserReal> {
     //查询用户列表
     IPage<SysUserReal> list(SysParm parm);
+
+    SysUserReal getOneByuserId(Integer userId);
+
 }

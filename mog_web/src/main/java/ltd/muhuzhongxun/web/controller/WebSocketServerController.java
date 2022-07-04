@@ -6,6 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import ltd.muhuzhongxun.web.entity.Message;
+import ltd.muhuzhongxun.web.entity.SysUser;
+import ltd.muhuzhongxun.web.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -32,15 +35,9 @@ import java.util.stream.Collectors;
 @ServerEndpoint("/Chat/{fromid}")
 public class WebSocketServerController {
 
-//    /**
-//     * 房间号 -> 组成员信息
-//     */
-//    private static ConcurrentHashMap<String, List<Session>> groupMemberInfoMap = new ConcurrentHashMap<>();
-//
-//    /**
-//     * 房间号 -> 在线人数
-//     */
-//    private static ConcurrentHashMap<String, Set<Integer>> onlineUserMap = new ConcurrentHashMap<>();
+    @Autowired
+    private SysUserService sysUserService;
+
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
      */
@@ -105,16 +102,15 @@ public class WebSocketServerController {
      */
     @OnOpen
     public void onOpen(Session session,@PathParam("fromid") String fromid) {
-//        List<Session> sessionList = groupMemberInfoMap.computeIfAbsent("1", k -> new ArrayList<>());
-//        Set<Integer> onlineUserList = onlineUserMap.computeIfAbsent("1", k -> new HashSet<>());
-//        onlineUserList.add(Integer.parseInt(fromid));
-//        sessionList.add(session);
         this.fromid=fromid;
         this.session=session;
         //加入set中
         webSocketSet.add(this);
         //在线人数加一
         addOnlineCount();
+        //todo 添加socket.onOpen(),更改用户的在线状态。onClose()同理
+//        SysUser user = new SysUser();
+//        sysUserService.updateById(user);
 //        // 发送上线通知
 //        sendInfo(sid, userId, onlineUserList.size(), "上线了~");
         log.info("有新窗口开始监听:"+fromid+",当前在线人数为" + getOnlineCount());

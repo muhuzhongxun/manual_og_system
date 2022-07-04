@@ -11,9 +11,12 @@ import ltd.muhuzhongxun.web.mapper.SysUserMapper;
 import ltd.muhuzhongxun.web.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,13 @@ import java.util.regex.Pattern;
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
+    @Autowired
+    private SysUserService userService;
+
     @Override
     public IPage<SysUser> list(SysParm parm){
         //构建分页对象
@@ -58,7 +68,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Map<String, Object> login(LoginVo loginVo) {
+    public Map<String, Object> login(LoginVo loginVo, HttpServletResponse response) {
         // 判断phone是否是邮箱
         String pattern = "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}";
         Pattern r = Pattern.compile(pattern);
@@ -72,6 +82,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         //TODO 校验校验验证码
+        if(!redisTemplate.opsForValue().get(phone).isEmpty()&&redisTemplate.opsForValue().get(phone).equals(code)){
+            System.out.println("验证码输出正确！");
+        }else{
+            // 验证码不正确
+            throw new RuntimeException("验证码不正确，请重新输入！");
+        }
 
         //手机号/邮箱已被使用
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
@@ -119,7 +135,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         map.put("name", name);
         //jwt生成token字符串
         String token = JwtHelper.createToken(userInfo.getUserId(),name,userInfo.getUserType(),true,userInfo.getAvatar());
+        // 返回token
         map.put("token",token);
+        // 此处为了方便加多个userId，本来该值应该是通过requests的请求头里的token信息用JwtHelper工具解析出来的
+        SysUser Info = baseMapper.selectOne(queryWrapper);
+        map.put("userId",Info.getUserId());
         return map;
     }
 }

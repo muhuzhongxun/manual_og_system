@@ -7,6 +7,7 @@ import ltd.muhuzhongxun.web.entityvo.LoginVo;
 import ltd.muhuzhongxun.web.entityvo.SysParm;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -29,5 +30,5 @@ public interface SysUserService extends IService<SysUser> {
     SysUser selectById(Integer Id);
 
     //会员登录
-    Map<String, Object> login(LoginVo loginVo);
+    Map<String, Object> login(LoginVo loginVo, HttpServletResponse response);
 }

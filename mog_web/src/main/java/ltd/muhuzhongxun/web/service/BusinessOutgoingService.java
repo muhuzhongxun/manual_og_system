@@ -30,11 +30,14 @@ public interface BusinessOutgoingService extends IService<BusinessOutgoing> {
     List<BusinessOutgoing> selectList();
 
     //前台 根据 Id 搜索 具体BusinessOutgoing信息
-    BusinessOutgoing selectById(Integer ogId);
+    BusinessOutgoing selectById(Long ogId);
 
     //后台查询所有信息列表
     IPage<BusinessOutgoing> list(SysParm parm);
 
     //前台查询发布者所有相关发布信息
     List<UserPublishMogVo> findPublicMogTree(Integer userId);
+
+    //前台用户获取自己的外发信息
+    List<BusinessOutgoing> findAllUserId(Integer userId);
 }

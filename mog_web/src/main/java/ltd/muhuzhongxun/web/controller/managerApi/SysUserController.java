@@ -59,7 +59,7 @@ public class SysUserController {
                     map.put("userId",one.getUserId());
                     map.put("name", loginName);
                     map.put("roles",one.getUserType());
-                    map.put("status",true);
+//                    map.put("status",true);
 //                    map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
                     map.put("avatar",one.getAvatar());
 //                String token = JwtHelper.createToken(one.getUserId(), loginName,one.getUserType(),true,one.getAvatar());

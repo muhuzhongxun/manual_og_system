@@ -54,7 +54,7 @@ public class MogController {
      */
     @ApiOperation(value="mog详细页面")
     @GetMapping("findMogDetail/{ogId}")
-    public ResultVo findMogDetail(@PathVariable Integer ogId){
+    public ResultVo findMogDetail(@PathVariable Long ogId){
         //查询详细对象
         BusinessOutgoing one = ogService.selectById(ogId);
         return ResultUtils.success("查询成功",one);
@@ -69,5 +69,6 @@ public class MogController {
         List<UserPublishMogVo> list = ogService.findPublicMogTree(userId);
         return ResultUtils.success("查询成功",list);
     }
+
 
 }

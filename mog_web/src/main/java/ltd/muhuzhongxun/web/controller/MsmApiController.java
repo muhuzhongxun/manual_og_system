@@ -1,10 +1,6 @@
 package ltd.muhuzhongxun.web.controller;
 
-
-import ltd.muhuzhongxun.utils.Mail;
-import ltd.muhuzhongxun.utils.RandomUtil;
-import ltd.muhuzhongxun.utils.ResultUtils;
-import ltd.muhuzhongxun.utils.ResultVo;
+import ltd.muhuzhongxun.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
@@ -12,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.TimeUnit;
@@ -49,13 +44,15 @@ public class MsmApiController {
         boolean isSend =false;
         if(phone.indexOf("@")==-1){
             //发送手机短信验证码事件
-
+            // 默拟验证码为983724，并且发送成功
+            code = "983724";
+            isSend = true;
         }else{
             //发送邮箱验证码事件
             isSend = Mail.sendCode(code,phone);
         }
-        //生成验证码放到redis里面，设置有效时间
         if(isSend) {
+            //生成验证码放到redis里面，设置有效时间
             redisTemplate.opsForValue().set(phone,code,2, TimeUnit.MINUTES);
             return ResultUtils.success("验证码已发送");
         } else {
